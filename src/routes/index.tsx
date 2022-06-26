@@ -1,7 +1,5 @@
-// import { AuthProvider as UserAuthProvider } from "@/lib/userAuth";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./Private";
-// import PrivateRoute from "./Private";
 export default function Pages() {
   return (
     <>

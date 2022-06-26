@@ -5,9 +5,6 @@ type ErrorMessageProps = {
   message: string | undefined;
 };
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
-  const isValid = () => {
-    return message != undefined;
-  };
   return message ? (
     <Typography
       sx={{

@@ -1,21 +1,37 @@
-import React from "react";
+import { BackNavigaterButton } from "@/components/Models/Navigaters/BackNavigaterButton";
 import styled from "styled-components";
 
-const StyledTypography = styled.div`
-  /* margin-top: 0;
-  margin-bottom: 0; */
-  /* line-height: 30px; */
-  font-size: 26px;
+const Heighter = styled.div`
+  height: 30px;
+`;
+
+const Wrapper = styled.div`
   color: white;
-  height: 100px;
-  text-align: center;
+  height: 160px;
   background-color: #0c5aba;
+`;
+
+const CenterizedTitle = styled.div`
+  font-size: 26px;
+  text-align: center;
 
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export function Title() {
-  return <StyledTypography>AI 不動産査定</StyledTypography>;
+interface Props {
+  returnUrl?: string;
+  hideReturn?: boolean;
 }
+
+export const Title: React.FC<Props> = ({ returnUrl, hideReturn }) => {
+  return (
+    <Wrapper>
+      <Heighter>
+        {hideReturn ? <></> : <BackNavigaterButton returnUrl={returnUrl} />}
+      </Heighter>
+      <CenterizedTitle>AI 不動産査定</CenterizedTitle>
+    </Wrapper>
+  );
+};

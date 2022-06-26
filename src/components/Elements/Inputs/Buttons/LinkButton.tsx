@@ -13,7 +13,7 @@ const URLButton = styled.a`
   text-decoration: none;
 `;
 
-const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
+export const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
   return (
     <Button disableElevation variant="contained" fullWidth sx={props.sx}>
       <URLButton href={props.href} target="_blank">

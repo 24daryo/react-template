@@ -1,5 +1,5 @@
-import { AppProvider } from "@/providers/app";
-import Pages from "./pages";
+import { AppProvider } from "@/providers";
+import Pages from "./routes";
 
 function App() {
   return (

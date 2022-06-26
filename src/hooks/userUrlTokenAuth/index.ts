@@ -37,6 +37,7 @@ export const useUrlTokenAuth = () => {
 
   const login = useCallback(() => {
     const token = getToken();
+    console.log(token);
     if (token === null) return;
 
     // keyが有効か確認

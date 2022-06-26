@@ -30,7 +30,7 @@ interface PropertyProps {
 export const ApartmentCard: React.FC<PropertyProps> = ({ isSelected }) => {
   return (
     <Card isSelected={isSelected}>
-      <VStack>
+      <VStack alignItems="center">
         <ApartmentIcon />
         <Label isSelected={isSelected}>マンション</Label>
       </VStack>
@@ -41,7 +41,7 @@ export const ApartmentCard: React.FC<PropertyProps> = ({ isSelected }) => {
 export const HouseCard: React.FC<PropertyProps> = ({ isSelected }) => {
   return (
     <Card isSelected={isSelected}>
-      <VStack>
+      <VStack alignItems="center">
         <HouseIcon />
         <Label isSelected={isSelected}>一戸建て</Label>
       </VStack>
@@ -52,7 +52,7 @@ export const HouseCard: React.FC<PropertyProps> = ({ isSelected }) => {
 export const LandCard: React.FC<PropertyProps> = ({ isSelected }) => {
   return (
     <Card isSelected={isSelected}>
-      <VStack>
+      <VStack alignItems="center">
         <HouseIcon />
         <Label isSelected={isSelected}>土地</Label>
       </VStack>

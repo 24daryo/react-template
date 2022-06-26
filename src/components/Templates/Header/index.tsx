@@ -7,14 +7,13 @@ export const Header: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        border: 1,
         fontSize: 20,
         height: 50,
         fontWeight: "bold",
       }}
       color="#313131"
     >
-      開発アカウント
+      開発アカウント ver2
     </Typography>
   );
 };

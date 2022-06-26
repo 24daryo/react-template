@@ -4,7 +4,6 @@ import React from "react";
 interface SubmitButtonProps {
   label: string;
   fullWidth?: boolean;
-  sx?: object | {};
   disabled?: boolean;
   onClick?: () => void;
 }
@@ -16,7 +15,11 @@ export const SubmitButton: React.FC<SubmitButtonProps> = (props) => {
       disableElevation
       variant="contained"
       fullWidth
-      sx={props.sx}
+      sx={{
+        height: 56,
+        fontSize: 15,
+        fontWeight: "bold",
+      }}
       onClick={props.onClick}
       disabled={props.disabled}
     >

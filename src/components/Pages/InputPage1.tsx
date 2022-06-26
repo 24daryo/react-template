@@ -1,25 +1,23 @@
-import { useDebounce } from "@/hooks/useDebounce";
-import React, { useEffect } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { InputLabel } from "@/components/Elements/Texts/InputLabel";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SubmitHandler, useForm } from "react-hook-form";
 // state
+import {
+  NextNavigaterButton,
+  PropertyTypeNavigaterButton,
+} from "@/components/Models/Navigaters";
 import { useRecoilState } from "recoil";
+import * as yup from "yup";
 import {
   locationAreaState,
   locationDetailState,
   postCodeState,
   propertyNameState,
-} from "../../state/state";
-import { RequiredLabel } from "../Elements/Icons/RequiredLabel";
-import { SubmitButton } from "../Elements/Inputs/Buttons/SubmitButton";
-import { ErrorMessage } from "../Elements/Inputs/TextFields/ErrorMessage";
-import { UserTextField } from "../Elements/Inputs/TextFields/UserTextField";
-import { HStack, VStack } from "../Elements/Layouts/Stack";
-import SearchInput from "../Elements/SearchInput";
+} from "../../state/propertyState";
+import { TextForm } from "../Elements/Inputs/TextFields/UserTextField";
+import { HStack } from "../Elements/Layouts/Stack";
 import { UserText } from "../Elements/Texts/UserText";
-import { PropertyTypeNavigaterButton } from "../Models/PropertyTypeNavigaterButton";
-// material-ui
-// import
+import { PropertyNameInput } from "../Models/Forms/PropertyNameInput";
 
 type FormInput = {
   propertyName: string;
@@ -28,9 +26,20 @@ type FormInput = {
   locationDetail: string;
 };
 
-const required = true;
+// バリデーションルール
+const schema = yup.object({
+  postCode: yup
+    .string()
+    .required("必須です")
+    .matches(
+      /^[0-9]{7}$/,
+      "郵便番号は半角数字7桁・ハイフンなしで入力してください"
+    ),
+  locationArea: yup.string().required("必須です"),
+  locationDetail: yup.string().required("必須です"),
+});
 
-const Step1 = () => {
+export const InputPage1: React.FC<{ next: string }> = ({ next }) => {
   // global state
   const [propertyName, setPropertyName] = useRecoilState(propertyNameState);
   const [postCode, setPostCode] = useRecoilState(postCodeState);
@@ -38,26 +47,8 @@ const Step1 = () => {
   const [locationDetail, setLocationDetail] =
     useRecoilState(locationDetailState);
 
-  // urlのパスを取得
-  const params = useParams();
-  const { property_type } = params; // apartment or house
-
-  // マンションの入力についてはこちらで制御する
-  const debouncedPropertyName = useDebounce(propertyName, 300);
-  useEffect(() => {
-    if (debouncedPropertyName.length > 0) {
-      console.log("マンション入力補完：実行");
-      // const mansionList = SearchMansion(debouncedPropertyName)
-    }
-  }, [debouncedPropertyName]);
-
   // react-hook-form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting, isDirty, isValid },
-    control,
-  } = useForm<FormInput>({
+  const form = useForm<FormInput>({
     mode: "onChange",
     criteriaMode: "all",
     defaultValues: {
@@ -66,159 +57,71 @@ const Step1 = () => {
       locationArea: locationArea,
       locationDetail: locationDetail,
     },
+    resolver: yupResolver(schema),
   });
-
-  const navigate = useNavigate();
+  const {
+    handleSubmit,
+    formState: { isValid },
+  } = form;
 
   const onSubmit: SubmitHandler<FormInput> = (data) => {
-    // set
     setPropertyName(data.propertyName);
-    setPostCode(data.postCode);
     setLocationArea(data.locationArea);
     setLocationDetail(data.locationDetail);
-
-    // jump
-    navigate(`/${property_type}/details`);
+    setPostCode(data.postCode);
   };
 
+  // urlのパスを取得
   return (
     <>
-      {/* <UserText>マンション種別</UserText> */}
-      <VStack spacing={2}>
-        <UserText>
-          査定したい物件の種類を選択肢、物件の情報を入力してください（1/3)
-        </UserText>
-        <HStack>
-          <PropertyTypeNavigaterButton propertyTypeName="apartment" />
-          <PropertyTypeNavigaterButton propertyTypeName="house" />
-        </HStack>
+      <UserText>
+        査定したい物件の種類を選択し、物件の情報を入力してください（1/3)
+      </UserText>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <VStack spacing={2}>
-            <SearchInput />
-            <div>
-              <HStack>
-                <UserText>マンション名</UserText>
-                <RequiredLabel />
-              </HStack>
-              <Controller
-                name="propertyName"
-                control={control}
-                rules={{ required: "必須項目です" }}
-                render={({ field }) => (
-                  <UserTextField
-                    {...field}
-                    placeholder="〇〇マンション"
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setPropertyName(e.target.value);
-                    }}
-                  />
-                )}
-              />
-              {errors.propertyName && (
-                <ErrorMessage message={errors.propertyName.message} />
-              )}
-            </div>
+      <HStack spacing={2} justifyContent="space-evenly">
+        <PropertyTypeNavigaterButton propertyTypeName="apartment" />
+        <PropertyTypeNavigaterButton propertyTypeName="house" />
+      </HStack>
 
-            <div>
-              <HStack>
-                <UserText>郵便番号</UserText>
-                <RequiredLabel />
-              </HStack>
-              <Controller
-                name="postCode"
-                control={control}
-                rules={{
-                  required: { value: true, message: "必須項目です" },
-                  pattern: {
-                    value: /^[0-9]{7}$/,
-                    message: "7桁の郵便番号を入力してください",
-                  },
-                }}
-                render={({ field }) => (
-                  <UserTextField
-                    {...field}
-                    type="number"
-                    placeholder="0000000"
-                    onChange={(e) => {
-                      if (e.target.value.length <= 7) field.onChange(e);
-                      if (e.target.value.length == 7) {
-                        console.log("郵便番号で検索");
-                      }
-                    }}
-                    error={Boolean(errors.postCode)}
-                  />
-                )}
-              />
-              {errors.postCode && (
-                <ErrorMessage message={errors.postCode.message} />
-              )}
-            </div>
+      <PropertyNameInput form={form} />
 
-            <div>
-              <HStack>
-                <UserText>都道府県・市区群・町名</UserText>
-                <RequiredLabel />
-              </HStack>
-              <Controller
-                name="locationArea"
-                control={control}
-                rules={{
-                  required: "必須項目です",
-                  maxLength: {
-                    value: 30,
-                    message: "30文字以内で入力してください",
-                  },
-                }}
-                render={({ field }) => (
-                  <UserTextField
-                    {...field}
-                    placeholder="東京都中央区日本橋"
-                    onChange={(e) => {
-                      field.onChange(e);
-                    }}
-                    error={Boolean(errors.locationArea)}
-                  />
-                )}
-              />
-              {errors.locationArea && (
-                <ErrorMessage message={errors.locationArea.message} />
-              )}
-            </div>
+      <div>
+        <InputLabel required label="郵便番号" />
+        <TextForm
+          form={form}
+          name="postCode"
+          type="number"
+          placeholder="0000000"
+          onChange={(e) => {}}
+        />
+      </div>
 
-            <div>
-              <HStack>
-                <UserText>丁目以降</UserText>
-                <RequiredLabel />
-              </HStack>
+      <div>
+        <InputLabel required label="都道府県・市区群・町名" />
+        <TextForm
+          form={form}
+          name="locationArea"
+          placeholder="東京都中央区日本橋"
+          onChange={(e) => {}}
+        />
+      </div>
 
-              <Controller
-                name="locationDetail"
-                control={control}
-                rules={{
-                  required: "必須項目です",
-                }}
-                render={({ field }) => (
-                  <UserTextField
-                    {...field}
-                    placeholder="1-1-1"
-                    error={Boolean(errors.locationDetail)}
-                  />
-                )}
-              />
-              <br />
-              {errors.locationDetail && (
-                <ErrorMessage message={errors.locationDetail.message} />
-              )}
-            </div>
+      <div>
+        <InputLabel required label="丁目以降" />
+        <TextForm
+          form={form}
+          name="locationDetail"
+          placeholder="1-1-1"
+          onChange={(e) => {}}
+        />
+      </div>
 
-            <SubmitButton label="次へ" disabled={!isValid} />
-          </VStack>
-        </form>
-      </VStack>
+      <NextNavigaterButton
+        label="次へ"
+        isValid={isValid}
+        next={next}
+        onClick={handleSubmit(onSubmit)}
+      />
     </>
   );
 };
-
-export default Step1;
