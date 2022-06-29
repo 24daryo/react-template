@@ -1,4 +1,9 @@
 # react-template
 react + typescriptによるテンプレート
 
-# Folder Structure
+# Setup
+
+```
+yarn install # node_modules追加
+yarn start # コンパイル+起動
+```

@@ -5,8 +5,7 @@ module.exports = (config) => {
     ...config.resolve,
     alias: {
       ...config.alias,
-      // エイリアスにするパスをココに書く
-      "@": path.resolve(__dirname, "./src/"),
+      "@": path.resolve(__dirname, "./src/"), //パス指定を@に書き換える
     },
   };
 
