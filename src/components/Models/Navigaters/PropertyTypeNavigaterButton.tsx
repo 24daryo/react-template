@@ -24,11 +24,11 @@ export const PropertyTypeNavigaterButton: React.FC<PropertyTypeProps> = ({
   const [, setBuildingStructure] = useRecoilState(buildingStructureState);
 
   const ButtonSelector = () => {
-    if (propertyTypeName == "apartment") {
+    if (propertyTypeName === "apartment") {
       return <ApartmentCard isSelected={propertyTypeName === property_type} />;
-    } else if (propertyTypeName == "house") {
+    } else if (propertyTypeName === "house") {
       return <HouseCard isSelected={propertyTypeName === property_type} />;
-    } else if (propertyTypeName == "land") {
+    } else if (propertyTypeName === "land") {
       return <LandCard isSelected={propertyTypeName === property_type} />;
     }
     return <>エラーが発生しました。開発者にお問い合わせください</>;

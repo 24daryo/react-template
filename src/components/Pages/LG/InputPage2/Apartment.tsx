@@ -2,23 +2,23 @@ import { InputLabel } from "@/components/Elements/Texts/InputLabel";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 // state
-import { TextForm } from "@/components/Elements/Inputs/TextFields/UserTextField";
+import { RadioGroupForm } from "@/components/Elements/Forms/RadioGroupForm";
+import { SelectForm } from "@/components/Elements/Forms/SelectForm";
+import { TextFieldForm } from "@/components/Elements/Forms/TextFieldForm";
 import {
   HStack,
   HStackStyler as HItem,
 } from "@/components/Elements/Layouts/Stack";
-import { BuildingYearSelect } from "@/components/Models/Forms/BuildingYearSelect";
-import { LayoutSelect } from "@/components/Models/Forms/LayoutSelect";
-import { StringGroup } from "@/components/Models/Forms/StringGroup";
+import { BuildingYearSelect } from "@/components/Models/Forms/BuildingYearSelectForm";
 import { NextNavigaterButton } from "@/components/Models/Navigaters";
 import {
   BuildingStructure,
   buildingStructureState,
   buildingYearState,
-  landAreaState,
   LayoutType,
   layoutTypeState,
   livingAreaState,
+  locatedFloorState,
   totalFloorState,
 } from "@/state/propertyState";
 import { useRecoilState } from "recoil";
@@ -38,34 +38,32 @@ type FormInput = {
 const schema = yup.object({
   buildingYear: yup.string().required("必須です"),
   livingArea: yup.string().required("必須です"),
-  landArea: yup.string().required("必須です"),
 });
 
 type Props = {
   next: string;
 };
 
-export const House: React.FC<Props> = ({ next }) => {
+export const Apartment: React.FC<Props> = ({ next }) => {
   // global state
   const [buildingYear, setBuildingYear] = useRecoilState(buildingYearState);
   const [buildingStructure, setBuildingStructure] = useRecoilState(
     buildingStructureState
   );
   const [livingArea, setLivingArea] = useRecoilState(livingAreaState);
-  const [landArea, setLandArea] = useRecoilState(landAreaState);
   const [layoutType, setLayoutType] = useRecoilState(layoutTypeState);
+  const [locatedFloor, setLocatedFloor] = useRecoilState(locatedFloorState);
   const [totalFloor, setTotalFloor] = useRecoilState(totalFloorState);
 
   // react-hook-form
   const form = useForm<FormInput>({
     mode: "onChange",
-    // criteriaMode: "all",
     defaultValues: {
       buildingYear: buildingYear,
       buildingStructure: buildingStructure,
       livingArea: livingArea,
-      landArea: landArea,
       layoutType: layoutType,
+      locatedFloor: locatedFloor,
       totalFloor: totalFloor,
     },
     resolver: yupResolver(schema),
@@ -79,8 +77,8 @@ export const House: React.FC<Props> = ({ next }) => {
     setBuildingYear(data.buildingYear);
     setBuildingStructure(data.buildingStructure);
     setLivingArea(data.livingArea);
-    setLandArea(data.landArea);
     setLayoutType(data.layoutType);
+    setLocatedFloor(data.locatedFloor);
     setTotalFloor(data.totalFloor);
   };
 
@@ -93,7 +91,7 @@ export const House: React.FC<Props> = ({ next }) => {
 
       <div>
         <InputLabel label="建築構造" />
-        <StringGroup
+        <RadioGroupForm
           form={form}
           name="buildingStructure"
           options={[
@@ -113,8 +111,8 @@ export const House: React.FC<Props> = ({ next }) => {
 
       <HStack spacing={3}>
         <HItem>
-          <InputLabel required label="居住面積" />
-          <TextForm
+          <InputLabel required label="専有面積" />
+          <TextFieldForm
             type="number"
             form={form}
             name="livingArea"
@@ -122,28 +120,42 @@ export const House: React.FC<Props> = ({ next }) => {
           />
         </HItem>
         <HItem>
-          <InputLabel required label="土地面積" />
-          <TextForm
-            type="number"
+          <InputLabel label="間取り" />
+          <SelectForm
             form={form}
-            name="landArea"
-            placeholder="100"
+            name="layoutType"
+            placeholder="未選択"
+            options={[
+              { label: "未選択", value: "" },
+              { label: "ワンルーム", value: "ワンルーム" },
+              { label: "1K", value: "1K" },
+              { label: "1DK/LDK", value: "1DK/LDK" },
+              { label: "2K/DK/LDK", value: "2K/DK/LDK" },
+              { label: "3K/DK/LDK", value: "3K/DK/LDK" },
+              { label: "4K/DK/LDK", value: "4K/DK/LDK" },
+              { label: "5K以上", value: "5K以上" },
+            ]}
           />
         </HItem>
       </HStack>
 
       <HStack spacing={3}>
         <HItem>
-          <InputLabel label="間取り" />
-          <LayoutSelect form={form} name="layoutType" />
+          <InputLabel label="所在階" />
+          <TextFieldForm
+            type="number"
+            form={form}
+            name="locatedArea"
+            placeholder="5"
+          />
         </HItem>
         <HItem>
           <InputLabel label="建物の階数" />
-          <TextForm
+          <TextFieldForm
             type="number"
             form={form}
             name="totalFloor"
-            placeholder="2"
+            placeholder="5"
           />
         </HItem>
       </HStack>

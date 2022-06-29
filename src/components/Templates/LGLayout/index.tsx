@@ -3,7 +3,7 @@ import { HStack, VStack } from "@/components/Elements/Layouts/Stack";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import { Header } from "../Header";
+import { Header } from "./Header";
 import { Title } from "./Title";
 
 interface Props {

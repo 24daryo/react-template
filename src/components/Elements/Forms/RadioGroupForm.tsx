@@ -5,15 +5,10 @@ import { Controller, UseFormReturn } from "react-hook-form";
 interface Props {
   name: string;
   form: UseFormReturn<any, any>;
-  options: LabelType[];
+  options: { label: string; value: string }[];
 }
 
-interface LabelType {
-  label: string;
-  value: string;
-}
-
-export const StringGroup: React.FC<Props> = ({ name, form, options }) => {
+export const RadioGroupForm: React.FC<Props> = ({ name, form, options }) => {
   const { control } = form;
   return (
     <Controller
@@ -31,6 +26,7 @@ export const StringGroup: React.FC<Props> = ({ name, form, options }) => {
                 value={value}
                 control={<Radio />}
                 label={label}
+                key={index}
               />
             );
           })}

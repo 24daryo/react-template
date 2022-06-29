@@ -1,6 +1,6 @@
 import { PropertyTypeNavigaterButton } from "@/components/Models/Navigaters";
-import { HStack, VStack } from "../Elements/Layouts/Stack";
-import { UserText } from "../Elements/Texts/UserText";
+import { HStack, VStack } from "../../Elements/Layouts/Stack";
+import { UserText } from "../../Elements/Texts/UserText";
 
 export const Home = () => {
   return (

@@ -1,4 +1,4 @@
-import { IntegerSelect } from "@/components/Elements/Inputs/IntegerSelect";
+import { SelectForm } from "@/components/Elements/Forms/SelectForm";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 
@@ -75,7 +75,7 @@ interface Props {
 
 export const BuildingYearSelect: React.FC<Props> = ({ name, form }) => {
   return (
-    <IntegerSelect
+    <SelectForm
       name={name}
       form={form}
       placeholder="未選択"

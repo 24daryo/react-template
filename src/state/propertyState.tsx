@@ -1,7 +1,6 @@
 import { atom } from "recoil";
-import { recoilPersist } from "recoil-persist";
 
-const { persistAtom } = recoilPersist();
+// const { persistAtom } = recoilPersist();
 
 // page1
 // // URLで状態を管理するためrecoilでは不要

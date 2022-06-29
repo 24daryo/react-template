@@ -12,22 +12,22 @@ function getUrlKey() {
   return key;
 }
 
-function removeKey() {
-  var url = new URL(window.location.href);
-  var params = url.searchParams;
-  params.delete("key");
-  window.history.replaceState("", "", url.pathname);
-}
+// function removeKey() {
+//   var url = new URL(window.location.href);
+//   var params = url.searchParams;
+//   params.delete("key");
+//   window.history.replaceState("", "", url.pathname);
+// }
 
 // URLを優先的に参照する
 const getToken = () => {
   const tokenByURL = getUrlKey();
-  if (tokenByURL != null) {
+  if (tokenByURL !== null) {
     storage.setToken(tokenByURL);
     return tokenByURL;
   }
   const tokenByStorage = storage.getToken();
-  if (tokenByStorage != null) return tokenByStorage;
+  if (tokenByStorage !== null) return tokenByStorage;
 
   return null;
 };
@@ -42,7 +42,7 @@ export const useUrlTokenAuth = () => {
 
     // keyが有効か確認
     loginWithToken(token).then((r) => {
-      if (r.status == "OK") {
+      if (r.status === "OK") {
         setUser({
           isvalid: true,
           item: r.results,
@@ -54,7 +54,7 @@ export const useUrlTokenAuth = () => {
         });
       }
     });
-  }, []);
+  }, [setUser]);
 
   return { user, login } as const;
 };

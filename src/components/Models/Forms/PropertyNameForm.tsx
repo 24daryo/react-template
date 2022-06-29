@@ -1,12 +1,7 @@
-import { TextForm } from "@/components/Elements/Inputs/TextFields/UserTextField";
+import { TextFieldForm } from "@/components/Elements/Forms/TextFieldForm";
 import { InputLabel } from "@/components/Elements/Texts/InputLabel";
 import { useDebounce } from "@/hooks/useDebounce";
-import {
-  locationAreaState,
-  locationDetailState,
-  postCodeState,
-  propertyNameState,
-} from "@/state/propertyState";
+import { propertyNameState } from "@/state/propertyState";
 import { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -16,15 +11,11 @@ interface Props {
   form: UseFormReturn<any, any>;
 }
 
-export const PropertyNameInput: React.FC<Props> = ({ form }) => {
+export const PropertyNameForm: React.FC<Props> = ({ form }) => {
   const { property_type } = useParams();
 
   // global state
   const [propertyName, setPropertyName] = useRecoilState(propertyNameState);
-  const [postCode, setPostCode] = useRecoilState(postCodeState);
-  const [locationArea, setLocationArea] = useRecoilState(locationAreaState);
-  const [locationDetail, setLocationDetail] =
-    useRecoilState(locationDetailState);
 
   // マンションの入力についてはこちらで制御する
   const debouncedPropertyName = useDebounce(propertyName, 300);
@@ -40,7 +31,7 @@ export const PropertyNameInput: React.FC<Props> = ({ form }) => {
       {property_type === "apartment" ? (
         <div>
           <InputLabel required label="マンション名" />
-          <TextForm
+          <TextFieldForm
             form={form}
             name="propertyName"
             placeholder="〇〇マンション"

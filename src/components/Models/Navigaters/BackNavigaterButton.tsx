@@ -15,7 +15,7 @@ export const BackNavigaterButton: React.FC<ReturnProps> = (prop) => {
     } else {
       navigate(-1);
     }
-  }, [navigate]);
+  }, [navigate, prop.returnUrl]);
 
   return (
     <Button
